@@ -72,20 +72,21 @@ async function userMiddlewareLogin(req, res, next) {
             message: "Incorrect Password",
           });
         }
+        console.log(userExist);
         next();
       } else {
-        res.status(403).json({
+        return res.status(403).json({
           message: "User dosen't exist, please sign up",
         });
       }
     } catch (err) {
       console.log(err);
-      res.status(500).json({
+      return res.status(500).json({
         message: "Internal Server Error",
       });
     }
   } else {
-    res.json({
+    return res.status(403).json({
       message: "Incorrect Inputs",
     });
   }
@@ -114,7 +115,6 @@ app.post("/login", userMiddlewareLogin, async (req, res) => {
   try {
     await User.findOne({
       username,
-      password,
     });
     res.status(200).json({ message: "Login Successful" });
   } catch (err) {
